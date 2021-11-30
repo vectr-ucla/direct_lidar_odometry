@@ -1,0 +1,59 @@
+#############################################################
+#                                                           #
+# Copyright (c) 2021, University of California, Los Angeles #
+#                                                           #
+# Authors: Kenny J. Chen, Brett T. Lopez                    #
+# Contact: kennyjchen@ucla.edu, btlopez@ucla.edu            #
+#                                                           #
+#############################################################
+
+dlo:
+
+  odomNode:
+
+    preprocessing:
+      cropBoxFilter:
+        use: true
+        size: 1.0
+      voxelFilter:
+        scan:
+          use: true
+          res: 0.25
+        submap:
+          use: true
+          res: 0.5
+
+    keyframe:
+      threshD: 5.0
+      threshR: 45.0
+
+    submap:
+      keyframe:
+        knn: 10
+        kcv: 10
+        kcc: 10
+
+    imu:
+      calibTime: 3
+      bufferSize: 2000
+
+    gicp:
+      minNumPoints: 10
+      f2f:
+        kCorrespondences: 10
+        maxCorrespondenceDistance: 1.0
+        maxIterations: 32
+        transformationEpsilon: 0.01
+        euclideanFitnessEpsilon: 0.01
+        ransac:
+          iterations: 5
+          outlierRejectionThresh: 1.0
+      f2m:
+        kCorrespondences: 20
+        maxCorrespondenceDistance: 0.5
+        maxIterations: 32
+        transformationEpsilon: 0.01
+        euclideanFitnessEpsilon: 0.01
+        ransac:
+          iterations: 5
+          outlierRejectionThresh: 1.0
