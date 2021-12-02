@@ -36,7 +36,7 @@ sudo apt install libomp-dev libpcl-dev libeigen3-dev
 Create a catkin workspace, clone the `direct_lidar_odometry` repository into the `src` folder, and compile via the [`catkin_tools`](https://catkin-tools.readthedocs.io/en/latest/) package (or [`catkin_make`](http://wiki.ros.org/catkin/commands/catkin_make) if preferred):
 ```
 mkdir ws && cd ws && mkdir src && catkin init && cd src
-git clone https://github.com/kennyjchen/direct_lidar_odometry.git
+git clone https://github.com/vectr-ucla/direct_lidar_odometry.git
 catkin build
 ```
 
