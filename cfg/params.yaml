@@ -39,7 +39,7 @@ dlo:
 
     gicp:
       minNumPoints: 10
-      f2f:
+      s2s:
         kCorrespondences: 10
         maxCorrespondenceDistance: 1.0
         maxIterations: 32
@@ -48,7 +48,7 @@ dlo:
         ransac:
           iterations: 5
           outlierRejectionThresh: 1.0
-      f2m:
+      s2m:
         kCorrespondences: 20
         maxCorrespondenceDistance: 0.5
         maxIterations: 32
