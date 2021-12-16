@@ -54,8 +54,8 @@ Make sure to edit the `pointcloud_topic` and `imu_topic` input arguments with yo
 If successful, RViz will open and you will see similar terminal outputs to the following:
 
 <p align='center'>
-    <img src="./doc/img/imu_calibration.png" alt="drawing" width="320"/>
-    <img src="./doc/img/terminal_output.png" alt="drawing" width="320"/>
+    <img src="./doc/img/imu_calibration.png" alt="drawing" width="400"/>
+    <img src="./doc/img/terminal_output.png" alt="drawing" width="400"/>
 </p>
 
 ### Test Data
