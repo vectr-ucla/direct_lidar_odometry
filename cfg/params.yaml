@@ -11,6 +11,18 @@ dlo:
 
   odomNode:
 
+    initialPose:
+      use: false
+      position:
+        x: 0.0
+        y: 0.0
+        z: 0.0
+      orientation:
+        w: 1.0
+        x: 0.0
+        y: 0.0
+        z: 0.0
+
     preprocessing:
       cropBoxFilter:
         use: true

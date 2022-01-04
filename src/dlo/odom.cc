@@ -45,6 +45,8 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
   this->odom.pose.pose.orientation.z = 0.;
   this->odom.pose.covariance = {0.};
 
+  this->origin = Eigen::Vector3f(0., 0., 0.);
+
   this->T = Eigen::Matrix4f::Identity();
   this->T_s2s = Eigen::Matrix4f::Identity();
   this->T_s2s_prev = Eigen::Matrix4f::Identity();
@@ -205,6 +207,20 @@ void dlo::OdomNode::getParams() {
   ros::param::param<int>("~dlo/odomNode/submap/keyframe/knn", this->submap_knn_, 10);
   ros::param::param<int>("~dlo/odomNode/submap/keyframe/kcv", this->submap_kcv_, 10);
   ros::param::param<int>("~dlo/odomNode/submap/keyframe/kcc", this->submap_kcc_, 10);
+
+  // Initial Position
+  ros::param::param<bool>("~dlo/odomNode/initialPose/use", this->initial_pose_use_, false);
+
+  double px, py, pz, qx, qy, qz, qw;
+  ros::param::param<double>("~dlo/odomNode/initialPose/position/x", px, 0.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/position/y", py, 0.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/position/z", pz, 0.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/orientation/w", qw, 1.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/orientation/x", qx, 0.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/orientation/y", qy, 0.0);
+  ros::param::param<double>("~dlo/odomNode/initialPose/orientation/z", qz, 0.0);
+  this->initial_position_ = Eigen::Vector3f(px, py, pz);
+  this->initial_orientation_ = Eigen::Quaternionf(qw, qx, qy, qz);
 
   // Crop Box Filter
   ros::param::param<bool>("~dlo/odomNode/preprocessing/cropBoxFilter/use", this->crop_use_, false);
@@ -557,9 +573,29 @@ void dlo::OdomNode::initializeDLO() {
   }
 
   // Gravity Align
-  if (this->gravity_align_ && this->imu_use_ && this->imu_calibrated) {
+  if (this->gravity_align_ && this->imu_use_ && this->imu_calibrated && !this->initial_pose_use_) {
     std::cout << "Aligning to gravity... "; std::cout.flush();
     this->gravityAlign();
+  }
+
+  // Use initial known pose
+  if (this->initial_pose_use_) {
+    std::cout << "Setting known initial pose... "; std::cout.flush();
+
+    // set known position
+    this->pose = this->initial_position_;
+    this->T.block(0,3,3,1) = this->pose;
+    this->T_s2s.block(0,3,3,1) = this->pose;
+    this->T_s2s_prev.block(0,3,3,1) = this->pose;
+    this->origin = this->initial_position_;
+
+    // set known orientation
+    this->rotq = this->initial_orientation_;
+    this->T.block(0,0,3,3) = this->rotq.toRotationMatrix();
+    this->T_s2s.block(0,0,3,3) = this->rotq.toRotationMatrix();
+    this->T_s2s_prev.block(0,0,3,3) = this->rotq.toRotationMatrix();
+
+    std::cout << "done" << std::endl << std::endl;
   }
 
   this->dlo_initialized = true;
@@ -1357,7 +1393,7 @@ void dlo::OdomNode::debug() {
   std::cout << "Position    [xyz]  :: " << this->pose[0] << " " << this->pose[1] << " " << this->pose[2] << std::endl;
   std::cout << "Orientation [wxyz] :: " << this->rotq.w() << " " << this->rotq.x() << " " << this->rotq.y() << " " << this->rotq.z() << std::endl;
   std::cout << "Distance Traveled  :: " << length_traversed << " meters" << std::endl;
-  std::cout << "Distance to Origin :: " << sqrt(pow(this->pose[0],2) + pow(this->pose[1],2) + pow(this->pose[2],2)) << " meters" << std::endl;
+  std::cout << "Distance to Origin :: " << sqrt(pow(this->pose[0]-this->origin[0],2) + pow(this->pose[1]-this->origin[1],2) + pow(this->pose[2]-this->origin[2],2)) << " meters" << std::endl;
 
   std::cout << std::endl << std::right << std::setprecision(2) << std::fixed;
   std::cout << "Computation Time :: " << std::setfill(' ') << std::setw(6) << this->comp_times.back()*1000. << " ms    // Avg: " << std::setw(5) << avg_comp_time*1000. << std::endl;

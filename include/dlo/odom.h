@@ -75,6 +75,7 @@ private:
   ros::Publisher keyframe_pub;
   ros::Publisher kf_pub;
 
+  Eigen::Vector3f origin;
   std::vector<std::pair<Eigen::Vector3f, Eigen::Quaternionf>> trajectory;
   std::vector<std::pair<std::pair<Eigen::Vector3f, Eigen::Quaternionf>, pcl::PointCloud<PointType>::Ptr>> keyframes;
   std::vector<std::vector<Eigen::Matrix4d, Eigen::aligned_allocator<Eigen::Matrix4d>>> keyframe_normals;
@@ -204,6 +205,10 @@ private:
   int submap_kcv_;
   int submap_kcc_;
   double submap_concave_alpha_;
+
+  bool initial_pose_use_;
+  Eigen::Vector3f initial_position_;
+  Eigen::Quaternionf initial_orientation_;
 
   bool crop_use_;
   double crop_size_;
