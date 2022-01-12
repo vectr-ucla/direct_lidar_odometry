@@ -27,7 +27,6 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
 
   this->dlo_initialized = false;
   this->imu_calibrated = false;
-  this->normals_initialized = false;
 
   this->icp_sub = this->nh.subscribe("pointcloud", 1, &dlo::OdomNode::icpCB, this);
   this->imu_sub = this->nh.subscribe("imu", 1, &dlo::OdomNode::imuCB, this);
@@ -464,6 +463,7 @@ void dlo::OdomNode::initializeInputTarget() {
   this->target_cloud = pcl::PointCloud<PointType>::Ptr (new pcl::PointCloud<PointType>);
   this->target_cloud = this->current_scan;
   this->gicp_s2s.setInputTarget(this->target_cloud);
+  this->gicp_s2s.calculateTargetCovariances();
 
   // initialize keyframes
   pcl::PointCloud<PointType>::Ptr first_keyframe (new pcl::PointCloud<PointType>);
@@ -477,9 +477,13 @@ void dlo::OdomNode::initializeInputTarget() {
 
   // keep history of keyframes
   this->keyframes.push_back(std::make_pair(std::make_pair(this->pose, this->rotq), first_keyframe));
-
   *this->keyframes_cloud += *first_keyframe;
   *this->keyframe_cloud = *first_keyframe;
+
+  // compute kdtree and keyframe normals (use gicp_s2s input source as temporary storage because it will be overwritten by setInputSources())
+  this->gicp_s2s.setInputSource(this->keyframe_cloud);
+  this->gicp_s2s.calculateSourceCovariances();
+  this->keyframe_normals.push_back(this->gicp_s2s.getSourceCovariances());
 
   this->publish_keyframe_thread = std::thread( &dlo::OdomNode::publishKeyframe, this );
   this->publish_keyframe_thread.detach();
@@ -785,12 +789,6 @@ void dlo::OdomNode::getNextPose() {
     this->gicp_s2s.align(*aligned, this->imu_SE3);
   } else {
     this->gicp_s2s.align(*aligned);
-  }
-
-  // if first iteration, store target covariance into keyframe normals
-  if (!this->normals_initialized) {
-    this->keyframe_normals.push_back(this->gicp_s2s.getTargetCovariances());
-    this->normals_initialized = true;
   }
 
   // Get the local S2S transform
@@ -1153,7 +1151,9 @@ void dlo::OdomNode::updateKeyframes() {
     // update keyframe vector
     this->keyframes.push_back(std::make_pair(std::make_pair(this->pose, this->rotq), this->current_scan_t));
 
-    // update keyframe normals
+    // compute kdtree and keyframe normals (use gicp_s2s input source as temporary storage because it will be overwritten by setInputSources())
+    this->gicp_s2s.setInputSource(this->keyframe_cloud);
+    this->gicp_s2s.calculateSourceCovariances();
     this->keyframe_normals.push_back(this->gicp_s2s.getSourceCovariances());
 
     *this->keyframes_cloud += *this->current_scan_t;
@@ -1225,10 +1225,6 @@ void dlo::OdomNode::pushSubmapIndices(std::vector<float> dists, int k) {
 
 void dlo::OdomNode::getSubmapKeyframes() {
 
-  // reinitialize submap cloud and normals
-  this->submap_cloud = pcl::PointCloud<PointType>::Ptr (new pcl::PointCloud<PointType>);
-  this->submap_normals.clear();
-
   // clear vector of keyframe indices to use for submap
   this->submap_kf_idx_curr.clear();
 
@@ -1286,28 +1282,34 @@ void dlo::OdomNode::getSubmapKeyframes() {
   std::sort(this->submap_kf_idx_curr.begin(), this->submap_kf_idx_curr.end());
   auto last = std::unique(this->submap_kf_idx_curr.begin(), this->submap_kf_idx_curr.end());
   this->submap_kf_idx_curr.erase(last, this->submap_kf_idx_curr.end());
-  for (auto k : this->submap_kf_idx_curr) {
-
-    // create current submap cloud
-    *this->submap_cloud += *this->keyframes[k].second;
-
-    // grab corresponding submap cloud's normals
-    this->submap_normals.insert( std::end(this->submap_normals), std::begin(this->keyframe_normals[k]), std::end(this->keyframe_normals[k]) );
-
-  }
 
   // sort current and previous submap kf list of indices
   std::sort(this->submap_kf_idx_curr.begin(), this->submap_kf_idx_curr.end());
   std::sort(this->submap_kf_idx_prev.begin(), this->submap_kf_idx_prev.end());
 
   // check if submap has changed from previous iteration
-  if(this->submap_kf_idx_curr == this->submap_kf_idx_prev){
+  if (this->submap_kf_idx_curr == this->submap_kf_idx_prev){
     this->submap_hasChanged = false;
-  } else{
+  } else {
     this->submap_hasChanged = true;
+
+    // reinitialize submap cloud, normals
+    pcl::PointCloud<PointType>::Ptr submap_cloud_ (boost::make_shared<pcl::PointCloud<PointType>>());
+    this->submap_normals.clear();
+
+    for (auto k : this->submap_kf_idx_curr) {
+
+      // create current submap cloud
+      *submap_cloud_ += *this->keyframes[k].second;
+
+      // grab corresponding submap cloud's normals
+      this->submap_normals.insert( std::end(this->submap_normals), std::begin(this->keyframe_normals[k]), std::end(this->keyframe_normals[k]) );
+    }
+
+    this->submap_cloud = submap_cloud_;
+    this->submap_kf_idx_prev = this->submap_kf_idx_curr;
   }
 
-  this->submap_kf_idx_prev = this->submap_kf_idx_curr;
 }
 
 

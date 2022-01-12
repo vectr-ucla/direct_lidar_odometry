@@ -94,6 +94,9 @@ public:
 
   virtual void registerInputSource(const PointCloudSourceConstPtr& cloud);
 
+  virtual bool calculateSourceCovariances();
+  virtual bool calculateTargetCovariances();
+
   const std::vector<Eigen::Matrix4d, Eigen::aligned_allocator<Eigen::Matrix4d>>& getSourceCovariances() const {
     return source_covs_;
   }

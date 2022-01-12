@@ -82,7 +82,6 @@ private:
 
   std::atomic<bool> dlo_initialized;
   std::atomic<bool> imu_calibrated;
-  std::atomic<bool> normals_initialized;
 
   std::string odom_frame;
   std::string child_frame;

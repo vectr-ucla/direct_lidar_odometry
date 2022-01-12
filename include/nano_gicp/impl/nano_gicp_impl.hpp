@@ -149,12 +149,22 @@ void NanoGICP<PointSource, PointTarget>::setTargetCovariances(const std::vector<
 }
 
 template <typename PointSource, typename PointTarget>
+bool NanoGICP<PointSource, PointTarget>::calculateSourceCovariances() {
+  return calculate_covariances(input_, *source_kdtree_, source_covs_);
+}
+
+template <typename PointSource, typename PointTarget>
+bool NanoGICP<PointSource, PointTarget>::calculateTargetCovariances() {
+  return calculate_covariances(target_, *target_kdtree_, target_covs_);
+}
+
+template <typename PointSource, typename PointTarget>
 void NanoGICP<PointSource, PointTarget>::computeTransformation(PointCloudSource& output, const Matrix4& guess) {
   if (source_covs_.size() != input_->size()) {
-    calculate_covariances(input_, *source_kdtree_, source_covs_);
+    calculateSourceCovariances();
   }
   if (target_covs_.size() != target_->size()) {
-    calculate_covariances(target_, *target_kdtree_, target_covs_);
+    calculateTargetCovariances();
   }
 
   LsqRegistration<PointSource, PointTarget>::computeTransformation(output, guess);
