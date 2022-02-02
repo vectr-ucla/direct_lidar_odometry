@@ -72,6 +72,7 @@ private:
   ros::Subscriber imu_sub;
 
   ros::Publisher odom_pub;
+  ros::Publisher pose_pub;
   ros::Publisher keyframe_pub;
   ros::Publisher kf_pub;
 

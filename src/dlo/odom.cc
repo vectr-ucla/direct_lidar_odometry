@@ -32,6 +32,7 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
   this->imu_sub = this->nh.subscribe("imu", 1, &dlo::OdomNode::imuCB, this);
 
   this->odom_pub = this->nh.advertise<nav_msgs::Odometry>("odom", 1);
+  this->pose_pub = this->nh.advertise<geometry_msgs::PoseStamped>("pose", 1);
   this->kf_pub = this->nh.advertise<nav_msgs::Odometry>("kfs", 1, true);
   this->keyframe_pub = this->nh.advertise<sensor_msgs::PointCloud2>("keyframe", 1, true);
 
@@ -358,6 +359,19 @@ void dlo::OdomNode::publishPose() {
   this->odom.child_frame_id = this->child_frame;
   this->odom_pub.publish(this->odom);
 
+  this->pose_ros.header.stamp = this->scan_stamp;
+  this->pose_ros.header.frame_id = this->odom_frame;
+
+  this->pose_ros.pose.position.x = this->pose[0];
+  this->pose_ros.pose.position.y = this->pose[1];
+  this->pose_ros.pose.position.z = this->pose[2];
+
+  this->pose_ros.pose.orientation.w = this->rotq.w();
+  this->pose_ros.pose.orientation.x = this->rotq.x();
+  this->pose_ros.pose.orientation.y = this->rotq.y();
+  this->pose_ros.pose.orientation.z = this->rotq.z();
+
+  this->pose_pub.publish(this->pose_ros);
 }
 
 
