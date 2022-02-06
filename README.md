@@ -79,11 +79,15 @@ rosbag play dlo_test.bag
 If you found this work useful, please cite our manuscript:
 
 ```
-@article{chen2021direct,
-  title={Direct LiDAR Odometry: Fast Localization with Dense Point Clouds},
-  author={Chen, Kenny and Lopez, Brett T and Agha-mohammadi, Ali-akbar and Mehta, Ankur},
-  journal={arXiv preprint arXiv:2110.00605},
-  year={2021}
+@article{chen2022direct,
+  author={Chen, Kenny and Lopez, Brett T. and Agha-mohammadi, Ali-akbar and Mehta, Ankur},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Direct LiDAR Odometry: Fast Localization With Dense Point Clouds}, 
+  year={2022},
+  volume={7},
+  number={2},
+  pages={2000-2007},
+  doi={10.1109/LRA.2022.3142739}
 }
 ```
 
