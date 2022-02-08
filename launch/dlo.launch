@@ -10,6 +10,7 @@
 <launch>
 
   <arg name="robot_namespace" default="robot"/>
+  <arg name="rviz" default="true"/>
 
   <arg name="pointcloud_topic" default="lidar"/>
   <arg name="imu_topic" default="imu"/>
@@ -27,6 +28,7 @@
 
     <!-- Publications -->
     <remap from="~odom" to="dlo/odom_node/odom"/>
+    <remap from="~pose" to="dlo/odom_node/pose"/>
     <remap from="~kfs" to="dlo/odom_node/odom/keyframe"/>
     <remap from="~keyframe" to="dlo/odom_node/pointcloud/keyframe"/>
 
