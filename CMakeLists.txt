@@ -60,14 +60,14 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 # NanoFLANN
-add_library(nanoflann SHARED
+add_library(nanoflann STATIC
   src/nano_gicp/nanoflann.cc
 )
 target_link_libraries(nanoflann ${PCL_LIBRARIES})
 target_include_directories(nanoflann PUBLIC include ${PCL_INCLUDE_DIRS})
 
 # NanoGICP
-add_library(nano_gicp SHARED
+add_library(nano_gicp STATIC
   src/nano_gicp/lsq_registration.cc
   src/nano_gicp/nano_gicp.cc
 )
