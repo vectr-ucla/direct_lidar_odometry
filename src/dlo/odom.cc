@@ -1136,7 +1136,7 @@ void dlo::OdomNode::updateKeyframes() {
   // calculate difference in orientation
   Eigen::Quaternionf dq = this->rotq * (closest_pose_r.inverse());
 
-  float theta_rad = atan2(sqrt( pow(dq.x(), 2) + pow(dq.y(), 2) + pow(dq.z(), 2) ), dq.w());
+  float theta_rad = 2. * atan2(sqrt( pow(dq.x(), 2) + pow(dq.y(), 2) + pow(dq.z(), 2) ), dq.w());
   float theta_deg = theta_rad * (180.0/M_PI);
 
   // update keyframe
