@@ -1166,12 +1166,12 @@ void dlo::OdomNode::updateKeyframes() {
     this->keyframes.push_back(std::make_pair(std::make_pair(this->pose, this->rotq), this->current_scan_t));
 
     // compute kdtree and keyframe normals (use gicp_s2s input source as temporary storage because it will be overwritten by setInputSources())
+    *this->keyframes_cloud += *this->current_scan_t;
+    *this->keyframe_cloud = *this->current_scan_t;
+
     this->gicp_s2s.setInputSource(this->keyframe_cloud);
     this->gicp_s2s.calculateSourceCovariances();
     this->keyframe_normals.push_back(this->gicp_s2s.getSourceCovariances());
-
-    *this->keyframes_cloud += *this->current_scan_t;
-    *this->keyframe_cloud = *this->current_scan_t;
 
     this->publish_keyframe_thread = std::thread( &dlo::OdomNode::publishKeyframe, this );
     this->publish_keyframe_thread.detach();
