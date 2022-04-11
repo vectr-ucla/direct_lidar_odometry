@@ -58,7 +58,7 @@ private:
   void updateKeyframes();
   void computeConvexHull();
   void computeConcaveHull();
-  void pushSubmapIndices(std::vector<float> dists, int k);
+  void pushSubmapIndices(std::vector<float> dists, int k, std::vector<int> frames);
   void getSubmapKeyframes();
 
   void debug();

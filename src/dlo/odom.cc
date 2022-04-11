@@ -1207,7 +1207,7 @@ void dlo::OdomNode::setAdaptiveParams() {
 /**
  * Push Submap Keyframe Indices
  **/
-void dlo::OdomNode::pushSubmapIndices(std::vector<float> dists, int k) {
+void dlo::OdomNode::pushSubmapIndices(std::vector<float> dists, int k, std::vector<int> frames) {
 
   // maintain max heap of at most k elements
   std::priority_queue<float> pq;
@@ -1227,7 +1227,7 @@ void dlo::OdomNode::pushSubmapIndices(std::vector<float> dists, int k) {
   // get all elements smaller or equal to the kth smallest element
   for (int i = 0; i < dists.size(); ++i) {
     if (dists[i] <= kth_element)
-      this->submap_kf_idx_curr.push_back(i);
+      this->submap_kf_idx_curr.push_back(frames[i]);
   }
 
 }
@@ -1248,13 +1248,17 @@ void dlo::OdomNode::getSubmapKeyframes() {
 
   // calculate distance between current pose and poses in keyframe set
   std::vector<float> ds;
+  std::vector<int> keyframe_nn; int i=0;
+  Eigen::Vector3f curr_pose = this->T_s2s.block(0,3,3,1);
+
   for (const auto& k : this->keyframes) {
-    float d = sqrt( pow(this->pose[0] - k.first.first[0], 2) + pow(this->pose[1] - k.first.first[1], 2) + pow(this->pose[2] - k.first.first[2], 2) );
+    float d = sqrt( pow(curr_pose[0] - k.first.first[0], 2) + pow(curr_pose[1] - k.first.first[1], 2) + pow(curr_pose[2] - k.first.first[2], 2) );
     ds.push_back(d);
+    keyframe_nn.push_back(i); i++;
   }
 
   // get indices for top K nearest neighbor keyframe poses
-  this->pushSubmapIndices(ds, this->submap_knn_);
+  this->pushSubmapIndices(ds, this->submap_knn_, keyframe_nn);
 
   //
   // TOP K NEAREST NEIGHBORS FROM CONVEX HULL
@@ -1270,7 +1274,7 @@ void dlo::OdomNode::getSubmapKeyframes() {
   }
 
   // get indicies for top kNN for convex hull
-  this->pushSubmapIndices(convex_ds, this->submap_kcv_);
+  this->pushSubmapIndices(convex_ds, this->submap_kcv_, this->keyframe_convex);
 
   //
   // TOP K NEAREST NEIGHBORS FROM CONCAVE HULL
@@ -1286,7 +1290,7 @@ void dlo::OdomNode::getSubmapKeyframes() {
   }
 
   // get indicies for top kNN for convex hull
-  this->pushSubmapIndices(concave_ds, this->submap_kcc_);
+  this->pushSubmapIndices(concave_ds, this->submap_kcc_, this->keyframe_concave);
 
   //
   // BUILD SUBMAP
