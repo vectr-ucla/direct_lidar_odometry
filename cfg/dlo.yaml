@@ -1,6 +1,6 @@
 #############################################################
 #                                                           #
-# Copyright (c) 2021, University of California, Los Angeles #
+# Copyright (c) 2022, University of California, Los Angeles #
 #                                                           #
 # Authors: Kenny J. Chen, Brett T. Lopez                    #
 # Contact: kennyjchen@ucla.edu, btlopez@ucla.edu            #

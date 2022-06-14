@@ -1,6 +1,8 @@
-# Direct LiDAR Odometry: Fast Localization with Dense Point Clouds
+# Direct LiDAR Odometry: <br> Fast Localization with Dense Point Clouds
 
-[DLO](https://arxiv.org/abs/2110.00605) is a lightweight and computationally-efficient frontend LiDAR odometry solution with consistent and accurate localization. It features several algorithmic innovations that increase speed, accuracy, and robustness of pose estimation in perceptually-challenging environments and has been extensively tested on aerial and legged robots.
+#### [[IEEE RA-L](https://ieeexplore.ieee.org/document/9681177)] [[ArXiv](https://arxiv.org/abs/2110.00605)] [[Video](https://www.youtube.com/watch?v=APot6QP_wvg)] [[Code](https://github.com/vectr-ucla/direct_lidar_odometry)]
+
+DLO is a lightweight and computationally-efficient frontend LiDAR odometry solution with consistent and accurate localization. It features several algorithmic innovations that increase speed, accuracy, and robustness of pose estimation in perceptually-challenging environments and has been extensively tested on aerial and legged robots.
 
 This work was part of NASA JPL Team CoSTAR's research and development efforts for the DARPA Subterranean Challenge, in which DLO was the primary state estimation component for our fleet of autonomous aerial vehicles.
 
