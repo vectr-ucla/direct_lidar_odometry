@@ -26,6 +26,8 @@ dlo::MapNode::MapNode(ros::NodeHandle node_handle) : nh(node_handle) {
   this->keyframe_sub = this->nh.subscribe("keyframes", 1, &dlo::MapNode::keyframeCB, this);
   this->map_pub = this->nh.advertise<sensor_msgs::PointCloud2>("map", 1);
 
+  this->save_pcd_srv = this->nh.advertiseService("save_pcd", &dlo::MapNode::savePcd, this);
+
   // initialize map
   this->dlo_map = pcl::PointCloud<PointType>::Ptr (new pcl::PointCloud<PointType>);
 
@@ -99,10 +101,6 @@ void dlo::MapNode::abortTimerCB(const ros::TimerEvent& e) {
 
 void dlo::MapNode::publishTimerCB(const ros::TimerEvent& e) {
 
-  this->voxelgrid.setLeafSize(this->leaf_size_, this->leaf_size_, this->leaf_size_);
-  this->voxelgrid.setInputCloud(this->dlo_map);
-  this->voxelgrid.filter(*this->dlo_map);
-
   if (this->dlo_map->points.size() == this->dlo_map->width * this->dlo_map->height) {
     sensor_msgs::PointCloud2 map_ros;
     pcl::toROSMsg(*this->dlo_map, map_ros);
@@ -124,8 +122,44 @@ void dlo::MapNode::keyframeCB(const sensor_msgs::PointCloud2ConstPtr& keyframe) 
   pcl::PointCloud<PointType>::Ptr keyframe_pcl = pcl::PointCloud<PointType>::Ptr (new pcl::PointCloud<PointType>);
   pcl::fromROSMsg(*keyframe, *keyframe_pcl);
 
+  // voxel filter
+  this->voxelgrid.setLeafSize(this->leaf_size_, this->leaf_size_, this->leaf_size_);
+  this->voxelgrid.setInputCloud(keyframe_pcl);
+  this->voxelgrid.filter(*keyframe_pcl);
+
   // save keyframe to map
   this->map_stamp = keyframe->header.stamp;
   *this->dlo_map += *keyframe_pcl;
+
+}
+
+bool dlo::MapNode::savePcd(direct_lidar_odometry::save_pcd::Request& req,
+                           direct_lidar_odometry::save_pcd::Response& res) {
+
+  pcl::PointCloud<PointType>::Ptr m =
+    pcl::PointCloud<PointType>::Ptr (boost::make_shared<pcl::PointCloud<PointType>>(*this->dlo_map));
+
+  float leaf_size = req.leaf_size;
+  std::string p = req.save_path;
+
+  std::cout << std::setprecision(2) << "Saving map to " << p + "/dlo_map.pcd" << "... "; std::cout.flush();
+
+  // voxelize map
+  pcl::VoxelGrid<PointType> vg;
+  vg.setLeafSize(leaf_size, leaf_size, leaf_size);
+  vg.setInputCloud(m);
+  vg.filter(*m);
+
+  // save map
+  int ret = pcl::io::savePCDFileBinary(p + "/dlo_map.pcd", *m);
+  res.success = ret == 0;
+
+  if (res.success) {
+    std::cout << "done" << std::endl;
+  } else {
+    std::cout << "failed" << std::endl;
+  }
+
+  return res.success;
 
 }

@@ -40,7 +40,16 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   pcl_ros
+  message_generation
 )
+
+add_service_files(
+  DIRECTORY srv
+  FILES
+  save_pcd.srv
+)
+
+generate_messages()
 
 catkin_package(
   CATKIN_DEPENDS

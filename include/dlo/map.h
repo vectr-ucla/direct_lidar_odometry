@@ -30,6 +30,9 @@ private:
 
   void keyframeCB(const sensor_msgs::PointCloud2ConstPtr& keyframe);
 
+  bool savePcd(direct_lidar_odometry::save_pcd::Request& req,
+               direct_lidar_odometry::save_pcd::Response& res);
+
   void getParams();
 
   ros::NodeHandle nh;
@@ -38,6 +41,8 @@ private:
 
   ros::Subscriber keyframe_sub;
   ros::Publisher map_pub;
+
+  ros::ServiceServer save_pcd_srv;
 
   pcl::PointCloud<PointType>::Ptr dlo_map;
   pcl::VoxelGrid<PointType> voxelgrid;

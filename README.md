@@ -60,6 +60,13 @@ If successful, RViz will open and you will see similar terminal outputs to the f
     <img src="./doc/img/terminal_output.png" alt="drawing" width="400"/>
 </p>
 
+### Services
+To save DLO's generated map into `.pcd` format, call the following service:
+
+```
+rosservice call /robot/dlo_map/save_pcd LEAF_SIZE SAVE_PATH
+```
+
 ### Test Data
 For your convenience, we provide example test data [here](https://ucla.box.com/shared/static/ziojd3auzp0zzcgwb1ucau9anh69xwv9.bag) (9 minutes, ~4.2GB). To run, first launch DLO (with default point cloud and IMU topics) via:
 
