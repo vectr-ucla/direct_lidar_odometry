@@ -68,6 +68,14 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+file(WRITE ${CMAKE_BINARY_DIR}/test_cpuid.cpp "#include <cpuid.h>")
+try_compile(HAS_CPUID ${CMAKE_BINARY_DIR} ${CMAKE_BINARY_DIR}/test_cpuid.cpp)
+file(REMOVE ${CMAKE_BINARY_DIR}/test_cpuid.cpp)
+if(HAS_CPUID)
+  add_compile_definitions(HAS_CPUID)
+endif()
+
 # NanoFLANN
 add_library(nanoflann STATIC
   src/nano_gicp/nanoflann.cc

@@ -130,10 +130,13 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
 
   // CPU Specs
   char CPUBrandString[0x40];
+  memset(CPUBrandString, 0, sizeof(CPUBrandString));
+  this->cpu_type = "";
+
+#ifdef HAS_CPUID
   unsigned int CPUInfo[4] = {0,0,0,0};
   __cpuid(0x80000000, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
   unsigned int nExIds = CPUInfo[0];
-  memset(CPUBrandString, 0, sizeof(CPUBrandString));
   for (unsigned int i = 0x80000000; i <= nExIds; ++i) {
     __cpuid(i, CPUInfo[0], CPUInfo[1], CPUInfo[2], CPUInfo[3]);
     if (i == 0x80000002)
@@ -146,6 +149,7 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
 
   this->cpu_type = CPUBrandString;
   boost::trim(this->cpu_type);
+#endif
 
   FILE* file;
   struct tms timeSample;
@@ -1407,7 +1411,9 @@ void dlo::OdomNode::debug() {
 
   std::cout << std::endl << "==== Direct LiDAR Odometry v" << this->version_ << " ====" << std::endl;
 
-  std::cout << std::endl << this->cpu_type << " x " << this->numProcessors << std::endl;
+  if (!this->cpu_type.empty()) {
+    std::cout << std::endl << this->cpu_type << " x " << this->numProcessors << std::endl;
+  }
 
   std::cout << std::endl << std::setprecision(4) << std::fixed;
   std::cout << "Position    [xyz]  :: " << this->pose[0] << " " << this->pose[1] << " " << this->pose[2] << std::endl;

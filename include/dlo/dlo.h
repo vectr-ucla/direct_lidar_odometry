@@ -8,7 +8,6 @@
  ***********************************************************/
 
 #include <atomic>
-#include <cpuid.h>
 #include <fstream>
 #include <iomanip>
 #include <ios>
@@ -22,6 +21,10 @@
 #include <sys/times.h>
 #include <sys/vtimes.h>
 #include <thread>
+
+#ifdef HAS_CPUID
+#include <cpuid.h>
+#endif
 
 #include <ros/ros.h>
 #include <boost/circular_buffer.hpp>
