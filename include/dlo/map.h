@@ -50,6 +50,7 @@ private:
   ros::Time map_stamp;
   std::string odom_frame;
 
+  bool publish_full_map_;
   double publish_freq_;
   double leaf_size_;
 

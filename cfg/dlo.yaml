@@ -9,7 +9,7 @@
 
 dlo:
 
-  version: 1.4.1
+  version: 1.4.2
 
   adaptiveParams: true
 
@@ -21,5 +21,6 @@ dlo:
     child_frame: base_link
 
   mapNode:
+    publishFullMap: true
     publishFreq: 1.0
     leafSize: 0.25

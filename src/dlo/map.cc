@@ -21,7 +21,10 @@ dlo::MapNode::MapNode(ros::NodeHandle node_handle) : nh(node_handle) {
   this->getParams();
 
   this->abort_timer = this->nh.createTimer(ros::Duration(0.01), &dlo::MapNode::abortTimerCB, this);
-  this->publish_timer = this->nh.createTimer(ros::Duration(this->publish_freq_), &dlo::MapNode::publishTimerCB, this);
+
+  if (this->publish_full_map_){
+    this->publish_timer = this->nh.createTimer(ros::Duration(this->publish_freq_), &dlo::MapNode::publishTimerCB, this);
+  }
   
   this->keyframe_sub = this->nh.subscribe("keyframes", 1, &dlo::MapNode::keyframeCB, this);
   this->map_pub = this->nh.advertise<sensor_msgs::PointCloud2>("map", 1);
@@ -50,6 +53,7 @@ dlo::MapNode::~MapNode() {}
 void dlo::MapNode::getParams() {
 
   ros::param::param<std::string>("~dlo/odomNode/odom_frame", this->odom_frame, "odom");
+  ros::param::param<bool>("~dlo/mapNode/publishFullMap", this->publish_full_map_, true);
   ros::param::param<double>("~dlo/mapNode/publishFreq", this->publish_freq_, 1.0);
   ros::param::param<double>("~dlo/mapNode/leafSize", this->leaf_size_, 0.5);
 
@@ -130,6 +134,16 @@ void dlo::MapNode::keyframeCB(const sensor_msgs::PointCloud2ConstPtr& keyframe) 
   // save keyframe to map
   this->map_stamp = keyframe->header.stamp;
   *this->dlo_map += *keyframe_pcl;
+
+  if (!this->publish_full_map_) {
+    if (keyframe_pcl->points.size() == keyframe_pcl->width * keyframe_pcl->height) {
+      sensor_msgs::PointCloud2 map_ros;
+      pcl::toROSMsg(*keyframe_pcl, map_ros);
+      map_ros.header.stamp = ros::Time::now();
+      map_ros.header.frame_id = this->odom_frame;
+      this->map_pub.publish(map_ros);
+    }
+  }
 
 }
 
