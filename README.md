@@ -12,6 +12,10 @@ This work was part of NASA JPL Team CoSTAR's research and development efforts fo
     <img src="./doc/img/spot.png" alt="drawing" width="320"/>
 </p>
 <p align="center">
+    <img src="./doc/gif/aquila.gif" alt="drawing" width="360"/>
+    <img src="./doc/gif/spot.gif" alt="drawing" width="360"/>
+</p>
+<p align="center">
     <img src="./doc/gif/dlo.gif" alt="drawing" width="720"/>
 </p>
 
@@ -116,6 +120,6 @@ This work is licensed under the terms of the MIT license.
     <img src="./doc/img/mc_entrance.png" alt="drawing" height="220"/>
 </p>
 <p align="center">
-    <img src="./doc/gif/aquila.gif" alt="drawing" width="720"/>
-    <img src="./doc/gif/spot.gif" alt="drawing" width="720"/>
+    <img src="./doc/gif/kentucky.gif" alt="drawing" width="360"/>
+    <img src="./doc/gif/losangeles.gif" alt="drawing" width="360"/>
 </p>
