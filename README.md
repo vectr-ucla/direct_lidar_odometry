@@ -85,7 +85,7 @@ rosbag play dlo_test.bag
 ```
 
 <p align='center'>
-    <img src="./doc/img/test_map.png" alt="drawing" width="640"/>
+    <img src="./doc/img/test_map.png" alt="drawing" width="720"/>
 </p>
 
 ## Citation
@@ -120,6 +120,6 @@ This work is licensed under the terms of the MIT license.
     <img src="./doc/img/mc_entrance.png" alt="drawing" height="220"/>
 </p>
 <p align="center">
-    <img src="./doc/gif/kentucky.gif" alt="drawing" width="360"/>
-    <img src="./doc/gif/losangeles.gif" alt="drawing" width="360"/>
+    <img src="./doc/gif/kentucky.gif" alt="drawing" height="200"/>
+    <img src="./doc/gif/losangeles.gif" alt="drawing" height="200"/>
 </p>
