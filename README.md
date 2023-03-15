@@ -34,13 +34,13 @@ Our system has been tested extensively on both Ubuntu 18.04 Bionic with ROS Melo
 - Eigen >= `3.3.7`
 
 Installing the binaries from Aptitude should work though:
-```
+```sh
 sudo apt install libomp-dev libpcl-dev libeigen3-dev 
 ```
 
 ### Compiling
 Create a catkin workspace, clone the `direct_lidar_odometry` repository into the `src` folder, and compile via the [`catkin_tools`](https://catkin-tools.readthedocs.io/en/latest/) package (or [`catkin_make`](http://wiki.ros.org/catkin/commands/catkin_make) if preferred):
-```
+```sh
 mkdir ws && cd ws && mkdir src && catkin init && cd src
 git clone https://github.com/vectr-ucla/direct_lidar_odometry.git
 catkin build
@@ -49,7 +49,7 @@ catkin build
 ### Execution
 After sourcing the workspace, launch the DLO odometry and mapping ROS nodes via:
 
-```
+```sh
 roslaunch direct_lidar_odometry dlo.launch \
   pointcloud_topic:=/robot/velodyne_points \
   imu_topic:=/robot/vn100/imu
@@ -67,20 +67,20 @@ If successful, RViz will open and you will see similar terminal outputs to the f
 ### Services
 To save DLO's generated map into `.pcd` format, call the following service:
 
-```
+```sh
 rosservice call /robot/dlo_map/save_pcd LEAF_SIZE SAVE_PATH
 ```
 
 ### Test Data
 For your convenience, we provide example test data [here](https://ucla.box.com/shared/static/ziojd3auzp0zzcgwb1ucau9anh69xwv9.bag) (9 minutes, ~4.2GB). To run, first launch DLO (with default point cloud and IMU topics) via:
 
-```
+```sh
 roslaunch direct_lidar_odometry dlo.launch
 ```
 
 In a separate terminal session, play back the downloaded bag:
 
-```
+```sh
 rosbag play dlo_test.bag
 ```
 
@@ -91,7 +91,7 @@ rosbag play dlo_test.bag
 ## Citation
 If you found this work useful, please cite our manuscript:
 
-```
+```bibtex
 @article{chen2022direct,
   author={Chen, Kenny and Lopez, Brett T. and Agha-mohammadi, Ali-akbar and Mehta, Ankur},
   journal={IEEE Robotics and Automation Letters}, 
