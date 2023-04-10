@@ -3,7 +3,7 @@
 <package format="2">
 
   <name>direct_lidar_odometry</name>
-  <version>1.4.2</version>
+  <version>1.4.3</version>
   <description>Direct LiDAR Odometry: Fast Localization with Dense Point Clouds</description>
 
   <maintainer email="kennyjchen@ucla.edu">Kenny J. Chen</maintainer>
