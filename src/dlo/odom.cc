@@ -1213,6 +1213,9 @@ void dlo::OdomNode::setAdaptiveParams() {
  **/
 void dlo::OdomNode::pushSubmapIndices(std::vector<float> dists, int k, std::vector<int> frames) {
 
+  // make sure dists is not empty
+  if (!dists.size()) { return; }
+
   // maintain max heap of at most k elements
   std::priority_queue<float> pq;
 
