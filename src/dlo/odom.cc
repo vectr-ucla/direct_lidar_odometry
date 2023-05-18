@@ -35,6 +35,7 @@ dlo::OdomNode::OdomNode(ros::NodeHandle node_handle) : nh(node_handle) {
   this->pose_pub = this->nh.advertise<geometry_msgs::PoseStamped>("pose", 1);
   this->kf_pub = this->nh.advertise<nav_msgs::Odometry>("kfs", 1, true);
   this->keyframe_pub = this->nh.advertise<sensor_msgs::PointCloud2>("keyframe", 1, true);
+  this->save_traj_srv = this->nh.advertiseService("save_traj", &dlo::OdomNode::saveTrajectory, this);
 
   this->odom.pose.pose.position.x = 0.;
   this->odom.pose.pose.position.y = 0.;
@@ -1337,6 +1338,21 @@ void dlo::OdomNode::getSubmapKeyframes() {
 
 }
 
+bool dlo::OdomNode::saveTrajectory(direct_lidar_odometry::save_traj::Request& path,direct_lidar_odometry::save_traj::Response& response) {
+  std::string kittipath = path.path + ".txt";
+  std::ofstream out_kitti(kittipath);
+  for (const auto& pose : this->trajectory) {
+    const auto& t = pose.first;
+    const auto& q = pose.second;
+    // Write to Kitti Format
+    auto R = q.normalized().toRotationMatrix();
+    out_kitti << std::fixed << std::setprecision(9) 
+      << R(0, 0) << " " << R(0, 1) << " " << R(0, 2) << " " << t.x() << " " 
+      << R(1, 0) << " " << R(1, 1) << " " << R(1, 2) << " " << t.y() << " " 
+      << R(2, 0) << " " << R(2, 1) << " " << R(2, 2) << " " << t.z() << "\n";
+  }
+  return true;
+}
 
 /**
  * Debug Statements

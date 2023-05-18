@@ -49,6 +49,7 @@
 #include <sensor_msgs/PointCloud2.h>
 
 #include <direct_lidar_odometry/save_pcd.h>
+#include <direct_lidar_odometry/save_traj.h>
 #include <nano_gicp/nano_gicp.hpp>
 
 typedef pcl::PointXYZI PointType;
