@@ -70,10 +70,10 @@ To save DLO's generated map into `.pcd` format, call the following service:
 ```sh
 rosservice call /robot/dlo_map/save_pcd LEAF_SIZE SAVE_PATH
 ```
-To save the trajectory in kitti format, call the following servie:
+To save the trajectory in KITTI format, call the following service:
 
 ```sh
-rosservice call /robot/dlo_odom/save_traj "path: '<path>'"
+rosservice call /robot/dlo_odom/save_traj SAVE_PATH
 ```
 
 ### Test Data

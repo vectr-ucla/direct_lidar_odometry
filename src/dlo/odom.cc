@@ -1338,9 +1338,13 @@ void dlo::OdomNode::getSubmapKeyframes() {
 
 }
 
-bool dlo::OdomNode::saveTrajectory(direct_lidar_odometry::save_traj::Request& path,direct_lidar_odometry::save_traj::Response& response) {
-  std::string kittipath = path.path + ".txt";
+bool dlo::OdomNode::saveTrajectory(direct_lidar_odometry::save_traj::Request& req,
+                                   direct_lidar_odometry::save_traj::Response& res) {
+  std::string kittipath = req.save_path + "/kitti_traj.txt";
   std::ofstream out_kitti(kittipath);
+
+  std::cout << std::setprecision(2) << "Saving KITTI trajectory to " << kittipath << "... "; std::cout.flush();
+
   for (const auto& pose : this->trajectory) {
     const auto& t = pose.first;
     const auto& q = pose.second;
@@ -1351,7 +1355,10 @@ bool dlo::OdomNode::saveTrajectory(direct_lidar_odometry::save_traj::Request& pa
       << R(1, 0) << " " << R(1, 1) << " " << R(1, 2) << " " << t.y() << " " 
       << R(2, 0) << " " << R(2, 1) << " " << R(2, 2) << " " << t.z() << "\n";
   }
-  return true;
+
+  std::cout << "done" << std::endl;
+  res.success = true;
+  return res.success;
 }
 
 /**

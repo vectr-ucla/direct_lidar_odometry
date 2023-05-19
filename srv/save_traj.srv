@@ -1,2 +1,3 @@
-string path
+string save_path
 ---
+bool success

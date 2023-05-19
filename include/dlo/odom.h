@@ -28,7 +28,8 @@ private:
   void abortTimerCB(const ros::TimerEvent& e);
   void icpCB(const sensor_msgs::PointCloud2ConstPtr& pc);
   void imuCB(const sensor_msgs::Imu::ConstPtr& imu);
-  bool saveTrajectory(direct_lidar_odometry::save_traj::Request& path, direct_lidar_odometry::save_traj::Response& response);
+  bool saveTrajectory(direct_lidar_odometry::save_traj::Request& req,
+                      direct_lidar_odometry::save_traj::Response& res);
 
   void getParams();
 
