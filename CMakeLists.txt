@@ -47,6 +47,7 @@ add_service_files(
   DIRECTORY srv
   FILES
   save_pcd.srv
+  save_traj.srv
 )
 
 generate_messages()

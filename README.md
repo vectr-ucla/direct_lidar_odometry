@@ -70,6 +70,11 @@ To save DLO's generated map into `.pcd` format, call the following service:
 ```sh
 rosservice call /robot/dlo_map/save_pcd LEAF_SIZE SAVE_PATH
 ```
+To save the trajectory in kitti format, call the following servie:
+
+```sh
+rosservice call /robot/dlo_odom/save_traj "path: '<path>'"
+```
 
 ### Test Data
 For your convenience, we provide example test data [here](https://ucla.box.com/shared/static/ziojd3auzp0zzcgwb1ucau9anh69xwv9.bag) (9 minutes, ~4.2GB). To run, first launch DLO (with default point cloud and IMU topics) via:
