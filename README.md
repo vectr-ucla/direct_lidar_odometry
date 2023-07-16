@@ -7,7 +7,7 @@
 - ROS Melodic or Noetic (`roscpp`, `std_msgs`, `sensor_msgs`, `geometry_msgs`, `pcl_ros`)
 - C++ >= 14
 - OpenMP >= 4.5
-- CMake >= 3.16.3
+- CMake >= 3.10.0
 - Eigen >= 3.3.7
 
 ### Use case
