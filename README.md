@@ -3,8 +3,7 @@
 + Nano-GICP is from [here, official repo of DLO or DLIO](https://github.com/vectr-ucla/direct_lidar_odometry)
 
 ### Dependencies
-- Ubuntu 18.04 or 20.04
-- ROS Melodic or Noetic (`roscpp`, `std_msgs`, `sensor_msgs`, `geometry_msgs`, `pcl_ros`)
+- PCL >= 1.8
 - C++ >= 14
 - OpenMP >= 4.5
 - CMake >= 3.10.0
