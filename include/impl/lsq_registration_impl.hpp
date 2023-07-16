@@ -41,8 +41,8 @@
 
 #include <boost/format.hpp>
 
-#include <lsq_registration.hpp>
-#include <gicp/so3.hpp>
+#include <nano_gicp/lsq_registration.hpp>
+#include <nano_gicp/gicp/so3.hpp>
 
 namespace nano_gicp {
 

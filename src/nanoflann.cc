@@ -39,8 +39,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *************************************************************************/
 
-#include <point_type_nano_gicp.hpp>
-#include <nanoflann.hpp>
-#include <impl/nanoflann_impl.hpp>
+#include <nano_gicp/point_type_nano_gicp.hpp>
+#include <nano_gicp/nanoflann.hpp>
+#include <nano_gicp/impl/nanoflann_impl.hpp>
 
 template class nanoflann::KdTreeFLANN<PointType>;

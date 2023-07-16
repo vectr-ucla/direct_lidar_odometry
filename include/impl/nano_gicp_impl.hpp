@@ -42,7 +42,7 @@
 #ifndef NANO_GICP_NANO_GICP_IMPL_HPP
 #define NANO_GICP_NANO_GICP_IMPL_HPP
 
-#include <gicp/so3.hpp>
+#include <nano_gicp/gicp/so3.hpp>
 
 namespace nano_gicp {
 

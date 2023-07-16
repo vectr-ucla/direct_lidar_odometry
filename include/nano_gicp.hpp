@@ -49,9 +49,9 @@
 #include <pcl/point_cloud.h>
 #include <pcl/registration/registration.h>
 
-#include <lsq_registration.hpp>
-#include <gicp/gicp_settings.hpp>
-#include <nanoflann.hpp>
+#include <nano_gicp/lsq_registration.hpp>
+#include <nano_gicp/gicp/gicp_settings.hpp>
+#include <nano_gicp/nanoflann.hpp>
 
 namespace nano_gicp {
 
