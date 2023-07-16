@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall -Wextra ${CMAKE_CXX_FLAGS}")
 ### get packages
 find_package(PCL REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_package(catkin)
+find_package(catkin REQUIRED)
 catkin_package( #this automatically adds/installs the results of build
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
