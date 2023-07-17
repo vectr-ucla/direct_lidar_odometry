@@ -11,45 +11,62 @@
 
 ### Use case
 + Refer - [here](https://github.com/engcang/FAST-LIO-SAM-QN)
-+ Or, refer the example as follows:
-```cpp
-#include <nano_gicp/point_type_nano_gicp.hpp>
-#include <nano_gicp/nano_gicp.hpp>
-
-nano_gicp::NanoGICP<PointType, PointType> m_nano_gicp;
-
-////// nano_gicp init
-m_nano_gicp.setMaxCorrespondenceDistance(max_corres_dist_);
-m_nano_gicp.setNumThreads(thread_number_);
-m_nano_gicp.setCorrespondenceRandomness(correspondences_number_);
-m_nano_gicp.setMaximumIterations(max_iter_);
-m_nano_gicp.setTransformationEpsilon(transformation_epsilon_);
-m_nano_gicp.setEuclideanFitnessEpsilon(euclidean_fitness_epsilon_);
-m_nano_gicp.setRANSACIterations(ransac_max_iter_);
-m_nano_gicp.setRANSACOutlierRejectionThreshold(ransac_outlier_rejection_threshold_);
-
-////// use
-pcl::PointCloud<pcl::PointXYZI>::Ptr src_(new pcl::PointCloud<pcl::PointXYZI>);
-pcl::PointCloud<pcl::PointXYZI>::Ptr dst_(new pcl::PointCloud<pcl::PointXYZI>);
-pcl::PointCloud<PointType> dummy_;
-/* watch out! */
-*src_ = src_data; //put your data here
-*dst_ = dst_data; //put your data here
-/* watch out! */
-m_nano_gicp.setInputSource(src_);
-m_nano_gicp.calculateSourceCovariances();
-m_nano_gicp.setInputTarget(dst_);
-m_nano_gicp.calculateTargetCovariances();
-m_nano_gicp.align(dummy_);
-
-double score_ = m_nano_gicp.getFitnessScore();
-// if matchness score is lower than threshold, (lower is better)
-if(m_nano_gicp.hasConverged() && score_ < icp_score_threshold)
-{
-  Eigen::Matrix4f pose_betweenf_ = m_nano_gicp.getFinalTransformation(); //float
-  Eigen::Matrix4d pose_betweend_ = m_nano_gicp.getFinalTransformation().cast<double>(); //double
-}
-```
++ Or, refer to the example usage as follows:
+  1. `catkin build` this repository in your workspace,
+  2. In the `CMakeLists.txt` of your wanted package, import `nano_gicp` as a component of `catkin`
+    ```CMake
+    find_package(catkin REQUIRED COMPONENTS
+      ...
+      nano_gicp #Include here
+      ...
+    )
+    include_directories(
+      ...
+      ${catkin_INCLUDE_DIRS} #Header files are included in catkin_INCLUDE_DIRS
+      ...
+    )
+    add_library(some_library src/some_src.cpp)
+    target_link_libraries(some_library ${catkin_LIBRARIES}) #Libraries are included in catkin_LIBRARIES
+    ```
+  3. Use in the source file of your wanted package as:
+    ```cpp
+    #include <nano_gicp/point_type_nano_gicp.hpp> //change PointType in this headerfile, currently pcl::PointXYZI
+    #include <nano_gicp/nano_gicp.hpp>
+    
+    nano_gicp::NanoGICP<PointType, PointType> m_nano_gicp;
+    
+    ////// nano_gicp init
+    m_nano_gicp.setMaxCorrespondenceDistance(max_corres_dist_);
+    m_nano_gicp.setNumThreads(thread_number_);
+    m_nano_gicp.setCorrespondenceRandomness(correspondences_number_);
+    m_nano_gicp.setMaximumIterations(max_iter_);
+    m_nano_gicp.setTransformationEpsilon(transformation_epsilon_);
+    m_nano_gicp.setEuclideanFitnessEpsilon(euclidean_fitness_epsilon_);
+    m_nano_gicp.setRANSACIterations(ransac_max_iter_);
+    m_nano_gicp.setRANSACOutlierRejectionThreshold(ransac_outlier_rejection_threshold_);
+    
+    ////// use
+    pcl::PointCloud<pcl::PointXYZI>::Ptr src_(new pcl::PointCloud<pcl::PointXYZI>);
+    pcl::PointCloud<pcl::PointXYZI>::Ptr dst_(new pcl::PointCloud<pcl::PointXYZI>);
+    pcl::PointCloud<PointType> dummy_;
+    /* watch out! */
+    *src_ = src_data; //put your data here
+    *dst_ = dst_data; //put your data here
+    /* watch out! */
+    m_nano_gicp.setInputSource(src_);
+    m_nano_gicp.calculateSourceCovariances();
+    m_nano_gicp.setInputTarget(dst_);
+    m_nano_gicp.calculateTargetCovariances();
+    m_nano_gicp.align(dummy_);
+    
+    double score_ = m_nano_gicp.getFitnessScore();
+    // if matchness score is lower than threshold, (lower is better)
+    if(m_nano_gicp.hasConverged() && score_ < icp_score_threshold)
+    {
+      Eigen::Matrix4f pose_betweenf_ = m_nano_gicp.getFinalTransformation(); //float
+      Eigen::Matrix4d pose_betweend_ = m_nano_gicp.getFinalTransformation().cast<double>(); //double
+    }
+    ```
 
 ## License and acknowledgements
 This work is licensed under the terms of the MIT license.
