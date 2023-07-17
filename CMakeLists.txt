@@ -30,7 +30,6 @@ find_package(catkin REQUIRED)
 catkin_package( #this automatically adds/installs the results of build
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
-  CATKIN_DEPENDS Eigen3 PCL OpenMP
 )
 
 ### get packages' headers
