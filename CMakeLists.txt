@@ -30,6 +30,7 @@ find_package(catkin REQUIRED)
 catkin_package( #this automatically adds/installs the results of build
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS Eigen3 PCL OpenMP
 )
 
 ### get packages' headers
@@ -47,4 +48,4 @@ add_library(nanoflann STATIC src/nanoflann.cc)
 target_link_libraries(nanoflann ${PCL_LIBRARIES})
 ### NanoGICP
 add_library(nano_gicp STATIC src/nano_gicp.cc)
-target_link_libraries(nano_gicp ${PCL_LIBRARIES} ${OpenMP_LIBS} nanoflann)
+target_link_libraries(nano_gicp ${PCL_LIBRARIES} ${EIGEN3_LIBS} ${OpenMP_LIBS} nanoflann)
