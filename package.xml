@@ -2,28 +2,17 @@
 
 <package format="2">
 
-  <name>direct_lidar_odometry</name>
-  <version>1.4.3</version>
-  <description>Direct LiDAR Odometry: Fast Localization with Dense Point Clouds</description>
+  <name>nano_gicp</name>
+  <version>1.0.0</version>
+  <description>nano_gicp</description>
 
+  <maintainer email="eungchang_mason@kaist.ac.kr">Eungchang Mason Lee</maintainer>
   <maintainer email="kennyjchen@ucla.edu">Kenny J. Chen</maintainer>
   <maintainer email="btlopez@ucla.edu">Brett T. Lopez</maintainer>
-
-  <author>Kenny J. Chen</author>
-  <author>Brett T. Lopez</author>
 
   <license>MIT</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-
-  <build_depend>message_generation</build_depend>
-  <exec_depend>message_runtime</exec_depend>
-
-  <depend>roscpp</depend>
-  <depend>std_msgs</depend>
-  <depend>sensor_msgs</depend>
-  <depend>geometry_msgs</depend>
-  <depend>pcl_ros</depend>
 
   <export>
   </export>
