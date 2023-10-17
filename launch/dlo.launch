@@ -10,7 +10,7 @@
 <launch>
 
   <arg name="robot_namespace" default="robot"/>
-  <arg name="rviz" default="true"/>
+  <arg name="rviz" default="false"/>
 
   <arg name="pointcloud_topic" default="lidar"/>
   <arg name="imu_topic" default="imu"/>
@@ -49,6 +49,6 @@
   </node>
 
   <!-- RViz -->
-  <node pkg="rviz" type="rviz" name="dlo_rviz" args="-d $(find direct_lidar_odometry)/launch/dlo.rviz"/>
+  <!-- <node pkg="rviz" type="rviz" name="dlo_rviz" args="-d $(find direct_lidar_odometry)/launch/dlo.rviz"/> -->
 
 </launch>
